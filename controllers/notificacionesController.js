@@ -1,52 +1,29 @@
-import { request, response } from "express"
-// import webpush from '../webpush.js'
+import { request, response } from "express";
+import webpush from "../webpushConfig.js";
 
-const usuauriosGET = (req = request, res = response) => {
-  const { mombre = "NO_NAME", q } = req.query
+let pushSubscription;
 
-   
+const registerUserSubscription = async (req = request, res = response) => {
+  // console.log( 'Body Controller',  req.body)
+  pushSubscription = req.body;
 
-  res.json({
-    ok: true,
-    msg: "Es una petición GET desde Controlador",
-    mombre,
-    q,
-  })
-}
+  res.status(200).json({
+    msg: "Exito!",
+  });
 
-const usuariosPOST = (req = request, res = response) => {
-  //   const body = req.body
-  const { nombre, edad } = req.body
+  const payload = JSON.stringify({
+    title: "My custom notification",
+    msg: "Hello World",
+  });
 
-  res.status(201).json({
-    ok: true,
-    msg: "Es una petición POST desde Controlador",
-    nombre,
-    edad,
-  })
-}
+  try { 
+    console.log('Se envia notificacion');
+    await webpush.sendNotification(pushSubscription, payload);
+  } catch (error) {
+    console.log({error});
+  }
+ 
 
-const usuariosPUT = (req = request, res = response) => {
-  const id = req.params.id
+};
 
-  res
-    .status(200)
-    .json({ ok: true, msg: "Es una petición PUT desde Controlador", id })
-}
-
-const usuariosDELETE = (req = request, res = response) => {
-  const id = req.params.id
-  res.json({ ok: true, msg: "Es una petición DELETE desde Controlador", id })
-}
-
-const usuariosPATCH = (req = request, res = response) => {
-  res.json({ ok: true, msg: "Es una petición PATCH desde Controlador" })
-}
-
-export {
-  usuauriosGET,
-  usuariosPOST,
-  usuariosPUT,
-  usuariosDELETE,
-  usuariosPATCH,
-}
+export { registerUserSubscription };

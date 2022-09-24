@@ -6,7 +6,7 @@ class Server {
   constructor() {
     this.app = express() //creamos la aplicación de express
     this.port = process.env.PORT
-    this.notifyPath = "/api/usuarios"
+    this.notifyPath = "/"
 
     // Middleware
     this.Middleware()
