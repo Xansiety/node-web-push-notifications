@@ -1,8 +1,9 @@
 const PUBLIC_VAPID_KEY =
   "BIKFgzuaFd3sICAugbbjV_FnYO50AkZX2exS5oCC2tu2qehFYFsSCNMqTCPQhc9FOjsEVPZ-3BlTIkEiDp6aqEM";
+const refForm = document.querySelector("#myForm");
+const message = document.querySelector("#msg");
 
 // Enviar la petición
-
 const subscribeUser = async () => {
   //Registrar nuestro servicio de worker
   const register = await navigator.serviceWorker.register(
@@ -31,5 +32,20 @@ const subscribeUser = async () => {
 
   console.log("suscrito");
 };
+
+refForm.addEventListener("submit", (e) => {
+  e.preventDefault(); // bloquear el comportamiento natural del formulario
+
+  fetch("/newMessage", {
+    method: "POST",
+    body: JSON.stringify({ message: message.value }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  refForm.reset()
+
+});
 
 subscribeUser();
